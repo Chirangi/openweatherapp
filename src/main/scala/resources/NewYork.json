@@ -1,0 +1,42 @@
+{
+  "lat": 40,
+  "lon": -74,
+  "timezone": "America/New_York",
+  "timezone_offset": -14400,
+  "current": {
+    "dt": 1712427845,
+    "sunrise": 1712399463,
+    "sunset": 1712445903,
+    "temp": 284.34,
+    "feels_like": 282.77,
+    "pressure": 1008,
+    "humidity": 48,
+    "dew_point": 273.75,
+    "uvi": 3.91,
+    "clouds": 95,
+    "visibility": 10000,
+    "wind_speed": 2.24,
+    "wind_deg": 44,
+    "wind_gust": 6.26,
+    "weather": [
+      {
+        "id": 804,
+        "main": "Clouds",
+        "description": "overcast clouds",
+        "icon": "04d"
+      }
+    ]
+  },
+  "alerts": [
+    {
+      "sender_name": "NWS Mount Holly NJ",
+      "event": "Small Craft Advisory",
+      "start": 1712390160,
+      "end": 1712455200,
+      "description": "* WHAT...Northwest winds 15 to 20 kt with gusts up to 25 kt.\n\n* WHERE...Coastal waters from Sandy Hook to Manasquan Inlet NJ\nout 20 nm and Coastal waters from Manasquan Inlet to Little\nEgg Inlet NJ out 20 nm.\n\n* WHEN...Until 10 PM EDT this evening.\n\n* IMPACTS...Conditions will be hazardous to small craft.",
+      "tags": [
+        "Marine event"
+      ]
+    }
+  ]
+}
