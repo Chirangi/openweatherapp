@@ -1,6 +1,7 @@
 package server
 
 import cats.effect.IO
+import com.typesafe.scalalogging.Logger
 import io.circe.generic.auto._
 import io.circe.parser._
 import models.OpenWeatherResponse
@@ -17,6 +18,8 @@ object LatParam extends QueryParamDecoderMatcher[String]("lat")
 object LongParam extends QueryParamDecoderMatcher[String]("lon")
 
 object OpenWeatherService {
+
+  private val logger: Logger = Logger("OpenWeatherService")
 
   private val apiKey = System.getenv("WEATHER_API_KEY")
   private val baseUri = uri"https://api.openweathermap.org/data/3.0/onecall?"
@@ -56,20 +59,27 @@ object OpenWeatherService {
     (latResult, lonResult) match {
       case (Some(lat), Some(lon)) =>
         if (isValidLatitude(lat) && isValidLongitude(lon)) {
+          logger.info(s"Requesting to OpenWeather for ($latStr, $lonStr)")
           val uri = OpenWeatherService.buildUri(lat, lon)
           client.expect[String](uri).flatMap { response =>
             IO.fromEither(decode[OpenWeatherResponse](response))
-              .map(Right(_))
+              .map { weatherResponse =>
+                logger.info(s"Successfully fetched weather response from OpenWeather for ($latStr, $lonStr)")
+                Right(weatherResponse)
+              }
               .handleErrorWith { _ =>
+                logger.error("Unable to parse response from OpenWeather")
                 IO.pure(Left("Failed to decode weather response from OpenWeather"))
               }
           }
         } else {
+          logger.error(s"Invalid values: Latitude $latStr Longitude $lonStr)")
           IO.pure(Left("Invalid values. Please verify that your:\n" +
             "1) Latitude is between -90 and 90\n" +
             "2) Longitude is between -180 and 180"))
         }
       case (_, _) =>
+        logger.error(s"Non-numeric values: Latitude $latStr Longitude $lonStr)")
         IO.pure(Left("Non-numeric input for latitude or longitude."))
     }
   }
